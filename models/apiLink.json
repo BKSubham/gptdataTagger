@@ -1,0 +1,10 @@
+{
+  "alienvault": {
+    "link": "https://otx.alienvault.com/api/v1/pulses/subscribed?page=1",
+    "APIKey": "57f7cfa5962a057da4931f91bdad58e16e033ac5f15688cf46b91d0819b7eccc"
+  },
+  "threatfox": {
+    "link": "https://threatfox-api.abuse.ch/api/v1/",
+    "APIKey": "c3c9c3de60796bb0f0fc9b055296222685ed3ff6f7e834f7"
+  }
+}
