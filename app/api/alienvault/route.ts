@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { connectDB } from "@/lib/mongodb";
 import { Threat } from "@/models/threat";
-
+interface ThreatItem {
+  name: string;
+  description: string;
+  tags?: string[];
+  modified: string;
+}
 // Fetch threat data from AlienVault OTX and save it to MongoDB
 export async function GET() {
   const API_KEY = process.env.ALIENVAULT_API_KEY;
@@ -25,7 +30,7 @@ export async function GET() {
     }
 
     // Map the response data into the format for MongoDB
-    const threatData = response.data.results.map((item: any) => ({
+    const threatData = response.data.results.map((item: ThreatItem) => ({
       name: item.name,
       description: item.description,
       tags: item.tags || [],
@@ -40,17 +45,23 @@ export async function GET() {
       message: "Data saved successfully!",
       threats: threatData,
     });
-  } catch (error: any) {
-    //console.error("Error fetching AlienVault data:", error);
-    return NextResponse.json(
-      {
-        error:
-          error.response?.data?.error ||
-          error.message ||
-          "Failed to fetch data",
-      },
-      { status: error.response?.status || 500 }
-    );
+  } catch (error: unknown) {
+    let errorMessage = "Failed to fetch data";
+    let statusCode = 500;
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    if (typeof error === "object" && error !== null && "response" in error) {
+      const err = error as {
+        response?: { data?: { error?: string }; status?: number };
+      };
+      errorMessage = err.response?.data?.error || errorMessage;
+      statusCode = err.response?.status || statusCode;
+    }
+
+    return NextResponse.json({ error: errorMessage }, { status: statusCode });
   }
 }
 

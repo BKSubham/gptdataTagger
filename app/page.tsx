@@ -5,14 +5,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FaArrowUp } from "react-icons/fa";
-
+interface ItemType {
+  name: string;
+  description: string;
+  matchedTag: string;
+}
 export default function Home() {
   const [query, setQuery] = useState("");
   const [response, setResponse] = useState("");
   const [searchResponse, setSearchResponse] = useState(""); // Response for search input
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-
+  console.log(response, " ", loading);
   const handleSearch = async (
     searchQuery: string,
     isQuestion: boolean = false
@@ -40,7 +44,7 @@ export default function Home() {
         throw new Error(data.error); // If there's an error message, throw it
       }
       // Format and render the data into UI components
-      const formattedResponse = data.map((item: any) => (
+      const formattedResponse = data.map((item: ItemType) => (
         <Card key={item.matchedTag} className="mb-4 shadow-md">
           <CardHeader>
             <h1 className="text-xl font-semibold">{item.name}</h1>

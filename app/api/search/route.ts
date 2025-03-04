@@ -33,9 +33,9 @@ export async function GET(req: Request) {
     }
 
     // Utility function to escape special regex characters
-    const escapeRegExp = (string: string) => {
-      return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "\\$&"); // escape special regex characters
-    };
+    // const escapeRegExp = (string: string) => {
+    //   return string.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "\\$&"); // escape special regex characters
+    // };
     // Split query into individual words
     const queryWords = query
       .split(" ")
@@ -61,7 +61,7 @@ export async function GET(req: Request) {
 
     // Format the response to include matched tag as title and name and description
     const formattedResponse = result.map((item) => ({
-      matchedTag: item.tags.find((tag: any) =>
+      matchedTag: item.tags.find((tag: string) =>
         regexArray.some((regex) => regex.test(tag))
       ),
       name: item.name,
